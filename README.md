@@ -6,17 +6,13 @@
 
 ## 在线体验
 
-如果只用 GitHub Pages，链接格式一般是：
+在线版本：
 
 ```text
-https://你的GitHub用户名.github.io/仓库名/
+https://rap-lyric-lab.onrender.com
 ```
 
-例如仓库名叫 `rap-lyric-lab`，GitHub 用户名叫 `tyler`，链接就是：
-
-```text
-https://tyler.github.io/rap-lyric-lab/
-```
+Render 免费实例长时间无人访问后会休眠，首次打开可能需要等待 30 到 60 秒。
 
 ## 功能亮点
 

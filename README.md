@@ -1,3 +1,9 @@
+#Live Demo: https://rap-lyric-lab.onrender.com
+## 项目截图
+
+![Rap Lyric Lab 首页](assets/screenshots/home.png)
+
+![歌词生成结果](assets/screenshots/generate-result.png)
 # Rap Lyric Lab
 
 一个中文说唱歌词生成网站。项目支持 Node 后端、SQLite 数据库、rapper / 专辑风格选择、关键词驱动生成、押韵助手、素材库、生成自审、历史记录、Markdown 导出和 PWA 离线访问。

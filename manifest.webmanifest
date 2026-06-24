@@ -1,0 +1,18 @@
+{
+  "name": "Rap Lyric Lab",
+  "short_name": "Lyric Lab",
+  "description": "本地优先的中文说唱歌词生成器，支持风格学习、押韵助手、自审和导出。",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f1115",
+  "theme_color": "#0f1115",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "./assets/covers/asen-nesa.jpg",
+      "sizes": "720x720",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ]
+}

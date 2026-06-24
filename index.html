@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rap Lyric Lab</title>
+    <meta name="description" content="本地优先的中文说唱歌词生成器，支持 rapper/专辑风格、关键词、押韵助手、自审和本地素材库。" />
+    <meta name="theme-color" content="#0f1115" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'" />
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace" aria-label="歌词生成器">
+        <aside class="panel controls">
+          <div class="brand">
+            <div>
+              <p class="eyebrow">Rap Lyric Lab</p>
+              <h1>中文说唱词作生成器</h1>
+            </div>
+            <button class="icon-button" id="randomizeButton" type="button" title="随机灵感" aria-label="随机灵感">
+              <span aria-hidden="true">↻</span>
+            </button>
+          </div>
+
+          <section class="auth-card" aria-label="本地登录">
+            <div class="auth-header">
+              <div>
+                <p class="eyebrow">Local Account</p>
+                <h2>本地登录</h2>
+              </div>
+              <div class="badge-stack">
+                <span id="accountBadge" class="badge">访客</span>
+                <span id="backendBadge" class="badge backend-badge">本地模式</span>
+              </div>
+            </div>
+            <div class="auth-grid">
+              <label class="field">
+                <span>账号</span>
+                <input id="accountInput" type="text" placeholder="自定义账号" maxlength="24" autocomplete="username" />
+              </label>
+              <label class="field">
+                <span>密码</span>
+                <input id="passwordInput" type="password" placeholder="本地密码" maxlength="48" autocomplete="current-password" />
+              </label>
+            </div>
+            <div class="button-row compact">
+              <button class="primary" id="loginButton" type="button">登录 / 注册</button>
+              <button id="logoutButton" type="button">退出</button>
+            </div>
+            <p id="authStatus" class="status">未登录时使用访客本地素材库。</p>
+          </section>
+
+          <label class="field">
+            <span>Rapper 风格库</span>
+            <select id="rapperSelect"></select>
+          </label>
+
+          <div class="rapper-chip-group" id="rapperChipGroup" aria-label="Rapper 快捷选择"></div>
+
+          <label class="field">
+            <span>专辑风格 / 封面</span>
+            <select id="albumSelect"></select>
+          </label>
+
+          <div class="album-grid" id="albumChipGroup" aria-label="专辑风格封面选择"></div>
+
+          <label class="field">
+            <span>主题</span>
+            <input id="themeInput" type="text" value="小镇、野心、家人" maxlength="42" />
+          </label>
+
+          <label class="field">
+            <span>核心关键词</span>
+            <input id="keywordInput" type="text" placeholder="例如：合同、雨后、兄弟、现金" maxlength="42" />
+          </label>
+
+          <label class="field">
+            <span>情绪</span>
+            <select id="moodSelect">
+              <option value="confident">自信</option>
+              <option value="heavy">沉重</option>
+              <option value="warm">温柔</option>
+              <option value="cold">冷静</option>
+              <option value="chaotic">爆发</option>
+            </select>
+          </label>
+
+          <div class="split">
+            <label class="field">
+              <span>Verse 行数</span>
+              <input id="lineCountInput" type="number" min="8" max="32" step="2" value="16" />
+            </label>
+            <label class="field">
+              <span>中英混写</span>
+              <select id="mixSelect">
+                <option value="medium">适中</option>
+                <option value="low">偏中文</option>
+                <option value="high">偏混写</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="range-field">
+            <span>脏话强度 <b id="explicitValue">2</b></span>
+            <input id="explicitInput" type="range" min="0" max="4" step="1" value="2" />
+          </label>
+
+          <label class="range-field">
+            <span>重复 Hook <b id="hookValue">2</b></span>
+            <input id="hookInput" type="range" min="0" max="4" step="1" value="2" />
+          </label>
+
+          <section class="rhyme-card" aria-label="押韵助手">
+            <div class="trainer-card-header">
+              <div>
+                <p class="eyebrow">Rhyme Helper</p>
+                <h2>押韵助手</h2>
+              </div>
+              <span id="rhymeKeyBadge" class="badge">近韵</span>
+            </div>
+            <label class="field">
+              <span>输入词语</span>
+              <input id="rhymeInput" type="text" placeholder="例如：合同、未来、money、flow" maxlength="32" />
+            </label>
+            <div class="button-row compact">
+              <button class="primary" id="rhymeButton" type="button">生成押韵词</button>
+              <button id="rhymeToKeywordButton" type="button">设为核心关键词</button>
+            </div>
+            <div class="rhyme-results" id="rhymeResults" aria-live="polite"></div>
+          </section>
+
+          <section class="trainer-card" aria-label="导入歌词训练">
+            <div class="trainer-card-header">
+              <div>
+                <p class="eyebrow">Local Library</p>
+                <h2>我的本地素材库</h2>
+              </div>
+              <span id="activeRapperBadge" class="badge">Asen 艾志恒</span>
+            </div>
+            <div class="local-library-grid">
+              <label class="field">
+                <span>歌手名字</span>
+                <input id="localRapperInput" type="text" placeholder="例如：Tyler" maxlength="24" />
+              </label>
+              <label class="field">
+                <span>专辑 / 风格名</span>
+                <input id="localAlbumInput" type="text" placeholder="例如：雨夜 Mixtape" maxlength="32" />
+              </label>
+            </div>
+            <label class="field">
+              <span>重要词语</span>
+              <input id="localKeywordsInput" type="text" placeholder="例如：合同、胜利、失眠。生成会围绕第一个词展开。" maxlength="56" />
+            </label>
+            <label class="file-field">
+              <span>封面图片</span>
+              <input id="coverInput" type="file" accept="image/*" />
+            </label>
+            <div class="cover-preview" id="coverPreview" aria-label="本地封面预览">
+              <span>本地封面</span>
+            </div>
+            <textarea id="trainingInput" rows="8" placeholder="粘贴歌词。括号里的翻译会自动忽略，Verse 标题会自动识别。素材只保存在你自己的浏览器里。"></textarea>
+            <div class="button-row compact">
+              <button class="primary" id="learnButton" type="button">保存到我的本地素材库</button>
+              <button id="clearTrainingButton" type="button">清空当前本地素材</button>
+            </div>
+            <div class="button-row compact">
+              <button id="removeLocalButton" type="button">移除当前本地歌手 / 专辑</button>
+            </div>
+            <p id="trainingStatus" class="status">Asen 艾志恒：未导入额外训练文本。</p>
+          </section>
+        </aside>
+
+        <section class="panel output-panel">
+          <div class="output-header">
+            <div>
+              <p class="eyebrow">Draft</p>
+              <h2 id="outputTitle">选择风格后生成</h2>
+            </div>
+            <div class="meter" aria-label="风格指标">
+              <span id="cadenceMeter"></span>
+              <span id="energyMeter"></span>
+              <span id="toneMeter"></span>
+            </div>
+          </div>
+          <div class="primary-actions" aria-label="歌词操作">
+            <button class="primary generate-action" id="generateButton" type="button">生成歌词</button>
+            <button class="copy-action" id="copyButton" type="button">复制歌词</button>
+            <button class="export-action" id="exportButton" type="button">导出 MD</button>
+          </div>
+          <section class="review-card" aria-label="生成自审报告">
+            <div class="review-card-header">
+              <div>
+                <p class="eyebrow">Self Review</p>
+                <h3>生成自审</h3>
+              </div>
+              <span id="reviewScore" class="score-badge">--</span>
+            </div>
+            <p id="reviewSummary" class="review-summary">生成后会检查关键词贯穿、叙事走向、句式新鲜度和段落收束。</p>
+            <div id="reviewChecks" class="review-checks" aria-live="polite"></div>
+          </section>
+          <pre id="lyricsOutput" class="lyrics-output" aria-live="polite"></pre>
+          <section class="history-card" aria-label="生成历史记录">
+            <div class="history-card-header">
+              <div>
+                <p class="eyebrow">History</p>
+                <h3>最近生成</h3>
+              </div>
+              <button id="clearHistoryButton" type="button">清空</button>
+            </div>
+            <div id="historyList" class="history-list"></div>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <script src="./src/engine.js"></script>
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>

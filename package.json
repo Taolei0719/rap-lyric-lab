@@ -1,0 +1,14 @@
+{
+  "name": "rap-lyric-lab",
+  "version": "1.0.0",
+  "description": "中文说唱歌词生成网站，包含 Node 后端和 SQLite 数据库。",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  }
+}
